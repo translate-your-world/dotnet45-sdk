@@ -1,0 +1,7 @@
+C:\Users\MDS\Code\tywi-public\TYW.SDK\TYW.SDK\obj\Debug\TYW.SDK.csprojResolveAssemblyReference.cache
+C:\Users\MDS\Code\tywi-public\TYW.SDK\TYW.SDK\bin\Debug\TYW.SDK.dll
+C:\Users\MDS\Code\tywi-public\TYW.SDK\TYW.SDK\bin\Debug\TYW.SDK.pdb
+C:\Users\MDS\Code\tywi-public\TYW.SDK\TYW.SDK\bin\Debug\NAudio.dll
+C:\Users\MDS\Code\tywi-public\TYW.SDK\TYW.SDK\bin\Debug\NAudio.xml
+C:\Users\MDS\Code\tywi-public\TYW.SDK\TYW.SDK\obj\Debug\TYW.SDK.dll
+C:\Users\MDS\Code\tywi-public\TYW.SDK\TYW.SDK\obj\Debug\TYW.SDK.pdb
