@@ -45,6 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Audio\PcmUtilities.cs" />
+    <Compile Include="Audio\PcmWrapper.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Http\ApiException.cs" />
     <Compile Include="Http\ApiResponseWrapper.cs" />

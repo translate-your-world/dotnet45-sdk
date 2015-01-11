@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net;
 using System.Web;
 
@@ -32,17 +33,29 @@ namespace TYW.SDK.Http
         private int _timeout;
 
         /// <summary>
+        /// The format of the data for the request
+        /// </summary>
+        private string _format;
+
+        /// <summary>
         /// Payload data, if any
         /// </summary>
         private T _data;
 
-        public AbstractApiRequest(string uri, HttpUtilities.Methods method, T payloadData, string userAgent, int timeout)
+        public AbstractApiRequest(string uri, HttpUtilities.Methods method, T payloadData, string userAgent, int timeout) :
+            this(uri, method, payloadData, "text/json", userAgent, timeout)
+        {
+
+        }
+
+        public AbstractApiRequest(string uri, HttpUtilities.Methods method, T payloadData, string format, string userAgent, int timeout)
         {
             _method = method;
             _userAgent = userAgent;
             _uri = uri;
             _data = payloadData;
             _timeout = timeout;
+            _format = format;
         }
 
         public virtual HttpWebRequest GetHttpRequest()
@@ -65,12 +78,25 @@ namespace TYW.SDK.Http
             //-------------------------------------------------------------------------------------
             if (_data != null)
             {
-                string json = HttpUtilities.EncodeJson<T>(_data);
-
-                httpRequest.ContentType = "text/json";
-                using (var streamWriter = new StreamWriter(httpRequest.GetRequestStream()))
+                httpRequest.ContentType = _format;
+                if (_format == "text/json")
                 {
-                    streamWriter.Write(json);
+                    string json = HttpUtilities.EncodeJson<T>(_data);
+                    httpRequest.ContentLength = json.Length;
+                    using (var streamWriter = new StreamWriter(httpRequest.GetRequestStream()))
+                    {
+                        streamWriter.Write(json);
+                    }
+                }
+                else
+                {
+                    byte[] data = _data as byte[];
+                    httpRequest.ContentLength = data.Length;
+                    Console.WriteLine("Sending audio length: " + data.Length);
+                    using (Stream stream = httpRequest.GetRequestStream())
+                    {
+                        stream.Write(data, 0, data.Length);
+                    }
                 }
             }
 

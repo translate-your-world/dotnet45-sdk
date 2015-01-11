@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-C:\Users\MDS\Code\tywi-public\TYW.SDK\TYW.SDK.Sample\obj\Debug\
+C:\Users\MDS\Code\tywi-public\dotnet45-sdk\TYW.SDK.Sample\obj\Debug\
 TYW.SDK.Sample
 none
 false
 DEBUG;TRACE
-C:\Users\MDS\Code\tywi-public\TYW.SDK\TYW.SDK.Sample\App.xaml
+C:\Users\MDS\Code\tywi-public\dotnet45-sdk\TYW.SDK.Sample\App.xaml
 5-1230000190
 
 13-1367972152
-14-1986819543
+14183858201
 MainWindow.xaml;Style.xaml;Views\AccountControl.xaml;Views\CallControl.xaml;Views\SessionControl.xaml;
 
 False

@@ -75,7 +75,7 @@ namespace TYW.SDK.Http.Session
         {
             try
             {
-                string relativeUri = String.Format(UriTemplates.POST_TEXT_URI, _session.SessionId, device.profile.id);
+                string relativeUri = String.Format(UriTemplates.GET_AUDIO_URI, _session.SessionId, device.profile.id);
                 string absoluteUri = TywiConfiguration.TywiServiceUri + relativeUri;
                 SessionApiRequest<string, AudioModel> request = new SessionApiRequest<string, AudioModel>(
                     device, absoluteUri, Http.HttpUtilities.Methods.GET, null);
@@ -83,7 +83,7 @@ namespace TYW.SDK.Http.Session
             }
             catch (Exception exc)
             {
-                throw new AccessDeniedException(String.Format("Failed to post text from device {0}", device.profile.id), exc);
+                throw new AccessDeniedException(String.Format("Failed to get audio from device {0}", device.profile.id), exc);
             }
         }
 
@@ -96,11 +96,15 @@ namespace TYW.SDK.Http.Session
         {
             try
             {
-                string relativeUri = String.Format(UriTemplates.POST_AUDIO_URI, _session.SessionId, device.profile.id);
-                string absoluteUri = TywiConfiguration.TywiServiceUri + relativeUri;
-                SessionApiRequest<byte[], byte[]> request = new SessionApiRequest<byte[], byte[]>(
-                    device, absoluteUri, Http.HttpUtilities.Methods.POST, audio);
-                this.ProcessRequest<byte[], byte[]>(request);
+                if (audio != null && audio.Length > 0)
+                {
+                    string relativeUri = String.Format(UriTemplates.POST_AUDIO_URI, _session.SessionId, device.profile.id);
+                    string absoluteUri = TywiConfiguration.TywiServiceUri + relativeUri;
+                    SessionApiRequest<byte[], byte[]> request = new SessionApiRequest<byte[], byte[]>(
+                        device, absoluteUri, Http.HttpUtilities.Methods.POST, audio, "audio/wav");
+
+                    this.ProcessRequest<byte[], byte[]>(request);
+                }
             }
             catch (Exception exc)
             {

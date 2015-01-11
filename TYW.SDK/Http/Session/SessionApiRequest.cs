@@ -9,8 +9,13 @@ namespace TYW.SDK.Http.Session
     {
         protected DeviceProfile _device;
 
-        public SessionApiRequest(DeviceProfile device, string uri, HttpUtilities.Methods method, T data) 
-            : base(uri, method, data, TywiConfiguration.RequestUserAgent, TywiConfiguration.RequestTimeout)  
+        public SessionApiRequest(DeviceProfile device, string uri, HttpUtilities.Methods method, T data)
+            : this(device, uri, method, data, "text/json")
+        {
+        }
+
+        public SessionApiRequest(DeviceProfile device, string uri, HttpUtilities.Methods method, T data, string format) 
+            : base(uri, method, data, format, TywiConfiguration.RequestUserAgent, TywiConfiguration.RequestTimeout)  
         {
             _device = device;
         }

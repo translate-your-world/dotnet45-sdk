@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading;
+using TYW.SDK.Audio;
 using TYW.SDK.Http;
 using TYW.SDK.Http.Auth;
 using TYW.SDK.Http.Session;
@@ -160,7 +161,7 @@ namespace TYW.SDK.Models
         {
             InitDevice();
             InitSession();
-            InitUser("Mark", "English");
+            InitUser("Mark", "English", "Spanish");
 
             int index = 0;
             DateTime next = DateTime.Now;
@@ -179,7 +180,6 @@ namespace TYW.SDK.Models
                     inputStreamHandler.BeginInvoke(index, _outputText, Device, null, null);
                 }
 
-                /*
                 if (_inputAudio != null)
                 {
                     AudioStreamHandlerDelegate inputStreamHandler = new AudioStreamHandlerDelegate(this.HandleInputAudio);
@@ -191,7 +191,6 @@ namespace TYW.SDK.Models
                     AudioStreamHandlerDelegate inputStreamHandler = new AudioStreamHandlerDelegate(this.HandleOutputAudio);
                     inputStreamHandler.BeginInvoke(index, _outputAudio, Device, null, null);
                 }
-                 */
 
                 next = next.AddMilliseconds(500);
                 double waitMs = (next - DateTime.Now).TotalMilliseconds;
@@ -213,6 +212,7 @@ namespace TYW.SDK.Models
                     accountName = this.AccountName,
                     bearerToken = this.BearerToken,
                     deviceId = HttpUtilities.CreateRandomId(8),
+                    profile = new UserProfileModel()
                 };
             }
         }
@@ -247,14 +247,14 @@ namespace TYW.SDK.Models
         /// <param name="gender"></param>
         /// <param name="language"></param>
         /// <param name="translationEngine"></param>
-        private void InitUser(string name, string language)
+        private void InitUser(string name, string textLanguage, string audioLanguage)
         {
             UserProfileModel user = new UserProfileModel()
             {
                 name = name,
-                language = language,
-                textLanguage = new LanguageStreamModel() { language = language, translationProvider = "Google" },
-                audioLanguage = new LanguageStreamModel() { language = language, translationProvider = "Google" },
+                language = textLanguage,
+                textLanguage = new LanguageStreamModel() { language = textLanguage, translationProvider = "Google" },
+                audioLanguage = new LanguageStreamModel() { language = audioLanguage, translationProvider = "Google" },
             };
             Device.profile = _service.PostProfile(user, Device);
         }
@@ -290,7 +290,13 @@ namespace TYW.SDK.Models
 
         private void HandleInputAudio(int index, TywiAudioStream stream, DeviceProfile device)
         {
-            _service.PostAudio(stream.ReadAudio(), device);
+
+            byte[] content = stream.ReadAudio();
+            if (content != null && content.Length > 0)
+            {
+                PcmWrapper wrapper = new PcmWrapper(content, 16000, 1, 16);
+                _service.PostAudio(wrapper.Encode(), device);
+            }
         }
 
         private void HandleOutputAudio(int index, TywiAudioStream stream, DeviceProfile device)
@@ -298,8 +304,7 @@ namespace TYW.SDK.Models
             AudioModel audio = _service.GetAudio(device);
             foreach (var line in audio.files)
             {     
-                // write the audio
-                //stream.WriteAudio(line.text);
+                stream.QueueAudio(line.audioFile);
             }
         }
 

@@ -65,24 +65,42 @@ namespace TYW.SDK.Models
 
     public class TywiAudioStream : TywiStream
     {
+        protected long readPosition = 0;
+        protected byte[] stored;
+
         public TywiAudioStream(Stream stream) : base(stream) { }
 
         public void WriteAudio(byte[] audio)
         {
-            _baseStream.Write(audio, (int)_baseStream.Length, audio.Length);
+            lock (_lock)
+            {
+                if (stored == null)
+                {
+                    stored = new byte[audio.Length];
+                    Array.Copy(audio, stored, audio.Length);
+                }
+                else
+                {
+                    int startLength = stored.Length;
+                    Array.Resize<byte>(ref stored, startLength + audio.Length);
+                    Array.Copy(audio, 0, stored, startLength, audio.Length);
+                }
+            }
         }
 
         public byte[] ReadAudio()
         {
-            byte[] buffer;
-
             lock (_lock)
             {
-                buffer = new byte[_baseStream.Length];
-                _baseStream.Read(buffer, 0, buffer.Length);
+                byte[] buffer = stored;
+                stored = null; 
+                return buffer;
             }
+        }
 
-            return buffer;
+        public virtual void QueueAudio(string audio)
+        {
+
         }
     }
 }

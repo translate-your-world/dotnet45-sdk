@@ -84,11 +84,14 @@ namespace TYW.SDK.Sample.ViewModels
 
             AudioInStream stream = new AudioInStream(waveIn, new MemoryStream());
             _session.RegisterInputAudio(stream);
+            stream.StartRecording();
         }
 
         private void InitialiseAudio()
         {
-
+            MemoryStream stream = new MemoryStream();
+            AudioOutStream audioStream = new AudioOutStream(stream);
+            _session.RegisterOutputAudio(audioStream);
         }
 
         private void TextInput()

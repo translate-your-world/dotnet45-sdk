@@ -14,9 +14,13 @@ namespace TYW.SDK.Http
                 {
                     return response.Data;
                 }
-                else
+                else if (response.Status != null && !response.Status.Okay)
                 {
                     throw new TywiException(response.Status.Message);
+                }
+                else
+                {
+                    return default(U);
                 }
             }
         }
