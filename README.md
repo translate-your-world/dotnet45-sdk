@@ -1,26 +1,26 @@
-This SDK is inteneded to help with connecting to the TYWI API. 
+This SDK is for use in connecting to the Translate Your World International (TYWI) API. 
 
-Connecting to the TYWI API:
+The TYWI is a JSON web-API required OAuth type authentication. This SDK is written in C#. SDKs for alternative languages may be forthcoming in future; for now, please use this library as a template for connecting using alternative languages, refer to the online API documentation (available via your TYWI account) or contact TYWI support for more information about connecting using your tech stack. 
 
 Accounts
 ========
-In ordr to use TYWI, you will need and account. Please register here [Account registration link to follow].
+You will need to register for an account before you can use the TYWI API. Please register at www.translateyourworld.com. 
 
 Authentication
 ==============
-Translate your world API uses OAuth style authentication (though full OAuth integration is not yet available). 
+Translate your world API uses OAuth style authentication, though full OAuth integration is not yet available. Before connecting to a TYWI session you must obtain a valid authentication token.
 
 Sessions
 ========
-Once you have your authentication token, in order to use TYWI, you need to be connected to a session. You can either create a new session and invite others or connect to an existing session with a session ID. Both methods are handled via the /session API method.
+TYWI interactions are handled via sessions. Registered users can either create a new session and invite others to connect to an existing session. Both methods are handled via the /session API method.
 
 Devices
 =======
-Each device needs to have a unique identifier within the session. The value of this unique identifier is not important and is distinct from any unique identifiers associated with your account. However it helps the software distinguish one connection from another, in the event of anonymous connections without accounts. 
+When connecting to a session, you must also send a unique identifier. Each device needs to have a unique identifier within the session. The value of this unique identifier is not important and is distinct from any unique identifiers associated with your account. However it helps the software distinguish one connection from another, in the event of anonymous connections without accounts. 
 
 Profiles
 ========
-Each user has a profile, which indicates their name and the language(s) they are connecting in. 
+Once connected to the session, you must also register a profile. Each user has a profile, which indicates their name and the language(s) they are connecting in. 
 
 Text and Audio
 ==============
